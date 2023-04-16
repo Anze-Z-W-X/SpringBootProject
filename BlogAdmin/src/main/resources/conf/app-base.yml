@@ -1,0 +1,5 @@
+article:
+  #最低阅读数
+  low-read: 10
+  #首页显示记录的数量
+  top-read: 20

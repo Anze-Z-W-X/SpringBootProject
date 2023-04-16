@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文章列表</title>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon"/>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div style="margin-left: 200px">
+    <h2>阅读最多的20篇文章</h2>
+    <table border="1px" cellpadding="0px" cellspacing="0px">
+        <thead>
+        <th>选择</th>
+        <th>序号</th>
+        <th>标题</th>
+        <th>副标题</th>
+        <th>已读数</th>
+        <th>发布时间</th>
+        <th>最后修改时间</th>
+        </thead>
+        <tbody>
+        <tr th:each="article, loopStatus:${articleList}">
+            <td></td>
+            <td th:text="${loopStatus.index+1}"></td>
+            <td th:text="${article.title}"></td>
+            <td th:text="${article.summary}"></td>
+            <td th:text="${article.readCount}"></td>
+            <td th:text="${article.createTime}"></td>
+            <td th:text="${article.updateTime}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

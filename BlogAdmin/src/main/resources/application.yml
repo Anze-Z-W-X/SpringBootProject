@@ -1,0 +1,17 @@
+server:
+  servlet:
+    context-path: /blog
+spring:
+  thymeleaf:
+    cache: false
+    suffix: .html
+    prefix: classpath:/templates/
+  config:
+    import: conf/app-base.yml,conf/db.yml
+
+#mybatis
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mappers/**/*.xml
