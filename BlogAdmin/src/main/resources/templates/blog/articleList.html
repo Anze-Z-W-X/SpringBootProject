@@ -18,19 +18,41 @@
         <th>已读数</th>
         <th>发布时间</th>
         <th>最后修改时间</th>
+        <th>操作</th>
         </thead>
         <tbody>
         <tr th:each="article, loopStatus:${articleList}">
-            <td></td>
+            <td><input type="checkbox" th:value="${article.id}"></td>
             <td th:text="${loopStatus.index+1}"></td>
             <td th:text="${article.title}"></td>
             <td th:text="${article.summary}"></td>
             <td th:text="${article.readCount}"></td>
             <td th:text="${article.createTime}"></td>
             <td th:text="${article.updateTime}"></td>
+            <td><a th:href="@{/article/get(id=${article.id})}">编辑文章属性</a> </td>
+        </tr>
+        <tr>
+            <td colspan="8">
+                <table width="100%">
+                    <tr>
+                        <td><button id="add" onclick="addArticle()">发布新文章</button></td>
+                        <td><button>删除文章</button></td>
+                        <td><button>文章概要</button></td>
+                    </tr>
+                </table>
+            </td>
         </tr>
         </tbody>
     </table>
+
+    <form id="frm" th:action="@{/view/addArticle}" method="get"></form>
+
 </div>
+
+<script type="text/javascript">
+    function addArticle(){
+        $("#frm").submit();
+    }
+</script>
 </body>
 </html>
