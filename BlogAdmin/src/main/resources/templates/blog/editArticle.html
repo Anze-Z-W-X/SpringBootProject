@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon"/>
+</head>
+<body>
+<div style="margin-left: 200px">
+    <h3>修改文章</h3>
+    <form th:action="@{/article/edit}" method="post">
+        <table>
+            <tr>
+                <td>标题</td>
+                <td><input type="text" th:value="${article.title}" name="title"></td>
+            </tr>
+            <tr>
+                <td>副标题</td>
+                <td><input type="text" th:value="${article.summary}" name="summary" size="50"></td>
+            </tr>
+            <tr>
+                <td>内容</td>
+                <td><textarea name="content" cols="60" rows="20" th:text="${article.content}"></textarea> </td>
+            </tr>
+        </table>
+        <br/>
+        <input type="hidden" th:value="${article.id}" name="id">
+        <input type="submit" value="确认修改" style="margin-left: 200px">
+    </form>
+</div>
+</body>
+</html>

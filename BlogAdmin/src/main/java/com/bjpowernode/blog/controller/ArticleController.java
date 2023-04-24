@@ -42,4 +42,31 @@ public class ArticleController {
         boolean add=articleService.addArticle(articleDTO);
         return "redirect:/article/hot";
     }
+
+    //查询文章内容
+    @GetMapping("/article/get")
+    public String queryById(Integer id,Model model){
+        if(id!=null&&id>0){
+            ArticleDTO articleDTO = articleService.queryByArticleId(id);
+            //转为VO
+            ArticleVO articleVO = BeanUtil.copyProperties(articleDTO, ArticleVO.class);
+            //添加数据到域中
+            model.addAttribute("article",articleVO);
+            //视图
+            return "/blog/editArticle";
+        }
+        return "/blog/error/error";
+    }
+
+    //更新文章
+    @PostMapping("/article/edit")
+    public String modifyArticle(@Validated(ArticleParam.EditArticle.class)ArticleParam articleParam){
+        ArticleDTO articleDTO = new ArticleDTO();
+        articleDTO.setId(articleParam.getId());
+        articleDTO.setContent(articleParam.getContent());
+        articleDTO.setTitle(articleParam.getTitle());
+        articleDTO.setSummary(articleParam.getSummary());
+        boolean edit = articleService.modifyArticle(articleDTO);
+        return "redirect:/article/hot";
+    }
 }

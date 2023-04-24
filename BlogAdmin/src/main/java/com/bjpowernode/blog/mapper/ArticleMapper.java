@@ -1,6 +1,7 @@
 package com.bjpowernode.blog.mapper;
 
 import com.bjpowernode.blog.model.dto.ArticleDTO;
+import com.bjpowernode.blog.model.map.ArticleAndDetailMap;
 import com.bjpowernode.blog.model.po.ArticleDetailPO;
 import com.bjpowernode.blog.model.po.ArticlePO;
 import org.apache.ibatis.annotations.*;
@@ -42,4 +43,33 @@ public interface ArticleMapper {
       values(#{articleId},#{content})
       """)
     int insertArticleDetail(ArticleDetailPO articleDetailPO);
+
+    @Select("""
+        select m.id as article_id,title,summary,ad.content
+        from article m inner join article_detail ad
+        on m.id=ad.article_id
+        where m.id=#{id};
+            """)
+    @Results(id="ArticleAndDetailMapperr",value = {
+            @Result(id=true,column = "article_id",property = "id"),
+            @Result(column = "title",property = "title"),
+            @Result(column = "summary",property = "summary"),
+            @Result(column = "content",property = "content")
+    })
+    ArticleAndDetailMap selectArticleAndDetail(Integer id);
+
+    //修改文章属性
+    @Update("""
+        update article set title=#{title},summary=#{summary},
+        update_time=#{updateTime}
+        where id=#{id}
+            """)
+    int updateArticle(ArticlePO articlePO);
+
+    //更新文章内容
+    @Update("""
+        update article_detail set content=#{content}
+        where article_id=#{articleId}
+            """)
+    int updateArticleDetail(ArticleDetailPO articleDetailPO);
 }

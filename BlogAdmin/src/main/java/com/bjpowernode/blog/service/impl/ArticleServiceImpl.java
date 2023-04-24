@@ -1,6 +1,7 @@
 package com.bjpowernode.blog.service.impl;
 
 import com.bjpowernode.blog.model.dto.ArticleDTO;
+import com.bjpowernode.blog.model.map.ArticleAndDetailMap;
 import com.bjpowernode.blog.model.po.ArticleDetailPO;
 import com.bjpowernode.blog.settings.ArticleSettings;
 import com.bjpowernode.blog.mapper.ArticleMapper;
@@ -44,5 +45,38 @@ public class ArticleServiceImpl implements ArticleService {
         articleDetailPO.setContent(articleDTO.getContent());
         int addDetail = articleMapper.insertArticleDetail(articleDetailPO);
         return addArticle+addDetail==2;
+    }
+
+    @Override
+    public ArticleDTO queryByArticleId(Integer id) {
+        //文章的属性，内容
+        ArticleAndDetailMap articleAndDetailMap = articleMapper.selectArticleAndDetail(id);
+        //转为DTO
+        ArticleDTO articleDTO = new ArticleDTO();
+        articleDTO.setTitle(articleAndDetailMap.getTitle());
+        articleDTO.setContent(articleAndDetailMap.getContent());
+        articleDTO.setSummary(articleAndDetailMap.getSummary());
+        articleDTO.setId(articleAndDetailMap.getId());
+
+
+        return articleDTO;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean modifyArticle(ArticleDTO articleDTO) {
+        //修改文章属性
+        ArticlePO articlePO = new ArticlePO();
+        articlePO.setTitle(articleDTO.getTitle());
+        articlePO.setSummary(articleDTO.getSummary());
+        articlePO.setUpdateTime(LocalDateTime.now());
+        articlePO.setId(articleDTO.getId());
+        int article = articleMapper.updateArticle(articlePO);
+        //修改文章内容
+        ArticleDetailPO articleDetailPO=new ArticleDetailPO();
+        articleDetailPO.setArticleId(articleDTO.getId());
+        articleDetailPO.setContent(articleDTO.getContent());
+        int detail = articleMapper.updateArticleDetail(articleDetailPO);
+        return (article+detail)==2;
     }
 }

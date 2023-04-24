@@ -11,4 +11,9 @@ public interface ArticleService {
 
     //发布新文章: article和article_detail表
     Boolean addArticle(ArticleDTO articleDTO);
+
+    //根据主键查询文章
+    ArticleDTO queryByArticleId(Integer id);
+
+    boolean modifyArticle(ArticleDTO articleDTO);
 }
