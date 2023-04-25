@@ -10,6 +10,7 @@ import com.bjpowernode.blog.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -78,5 +79,27 @@ public class ArticleServiceImpl implements ArticleService {
         articleDetailPO.setContent(articleDTO.getContent());
         int detail = articleMapper.updateArticleDetail(articleDetailPO);
         return (article+detail)==2;
+    }
+
+    //删除文章属性，内容
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int removeArticle(List<Integer> idList) {
+        articleMapper.deleteArticle(idList);
+        articleMapper.deleteDetail(idList);
+        return idList.size()*2;
+    }
+
+    @Override
+    public String queryTop20Content(Integer id) {
+        ArticleDetailPO articleDetailPO = articleMapper.selectArticleDetailByArticleId(id);
+        String content = "无内容";
+        if(articleDetailPO!=null){
+            content = articleDetailPO.getContent();
+            if(StringUtils.hasText(content)){
+                content = content.substring(0, Math.min(content.length(), 20));
+            }
+        }
+        return content;
     }
 }

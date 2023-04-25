@@ -72,4 +72,38 @@ public interface ArticleMapper {
         where article_id=#{articleId}
             """)
     int updateArticleDetail(ArticleDetailPO articleDetailPO);
+
+    //删除文章属性
+    @Delete("""
+        <script>
+            delete from article where id in 
+            <foreach item="id" collection="list" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </script>
+            """)
+    void deleteArticle(List<Integer> idList);
+
+    //删除文章内容
+    @Delete("""
+        <script>
+        delete from article_detail where article_id in 
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        </script>
+            """)
+    void deleteDetail(List<Integer> idList);
+
+
+    @Select("""
+        select id,article_id,content from article_detail
+        where article_id=#{articleId}
+            """)
+    @Results(id="articleDetailMapper",value = {
+            @Result(id = true,column = "id",property = "id"),
+            @Result(column = "article_id",property = "articleId"),
+            @Result(column = "content",property = "content")
+    })
+    ArticleDetailPO selectArticleDetailByArticleId(Integer articleId);
 }

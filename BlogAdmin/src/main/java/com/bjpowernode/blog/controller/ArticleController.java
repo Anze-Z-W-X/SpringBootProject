@@ -1,6 +1,8 @@
 package com.bjpowernode.blog.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.bjpowernode.blog.formatter.IdType;
+import com.bjpowernode.blog.handler.exp.IdTypeException;
 import com.bjpowernode.blog.model.dto.ArticleDTO;
 import com.bjpowernode.blog.model.param.ArticleParam;
 import com.bjpowernode.blog.model.po.ArticlePO;
@@ -13,7 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -68,5 +73,22 @@ public class ArticleController {
         articleDTO.setSummary(articleParam.getSummary());
         boolean edit = articleService.modifyArticle(articleDTO);
         return "redirect:/article/hot";
+    }
+
+    @PostMapping("/article/remove")
+    public String removeArticle(@RequestParam("ids")IdType idType){
+        if(idType==null)throw new IdTypeException("ID为空");
+        int delete = articleService.removeArticle(idType.getIdList());
+        return "redirect:/article/hot";
+    }
+
+    @GetMapping("/article/detail/overview")
+    @ResponseBody
+    public String queryDetail(Integer id){
+        String top20Content = "无ID";
+        if(id!=null&&id>0){
+            top20Content = articleService.queryTop20Content(id);
+        }
+        return top20Content;
     }
 }

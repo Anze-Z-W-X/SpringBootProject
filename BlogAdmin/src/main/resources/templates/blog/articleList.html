@@ -36,14 +36,18 @@
                 <table width="100%">
                     <tr>
                         <td><button id="add" onclick="addArticle()">发布新文章</button></td>
-                        <td><button>删除文章</button></td>
-                        <td><button>文章概要</button></td>
+                        <td><button id="del" onclick="deleteArticle()">删除文章</button></td>
+                        <td><button id="view" onclick="overview()">文章概要</button></td>
                     </tr>
                 </table>
             </td>
         </tr>
         </tbody>
     </table>
+
+    <form id="delFrm" th:action="@{/article/remove}" method="post">
+        <input type="hidden" name="ids" id="ids" value="">
+    </form>
 
     <form id="frm" th:action="@{/view/addArticle}" method="get"></form>
 
@@ -52,6 +56,35 @@
 <script type="text/javascript">
     function addArticle(){
         $("#frm").submit();
+    }
+
+    function deleteArticle(){
+        var ids=[];
+        $("input[type='checkbox']:checked").each((index,item)=>{
+            ids.push(item.value);
+        })
+        if(ids.length==0){
+            alert("请选择文章!")
+            return;
+        }
+        $("#ids").val(ids);
+        $("#delFrm").submit();
+    }
+
+    function overview(){
+        var ids=[];
+        $("input[type='checkbox']:checked").each((index,item)=>{
+            ids.push(item.value);
+        })
+
+        if(ids.length!=1){
+            alert("选择一个文章查看")
+            return;
+        }
+
+        $.get("../article/detail/overview",{id:ids[0]},(date,status)=>{
+            alert(date);
+        })
     }
 </script>
 </body>

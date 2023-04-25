@@ -16,4 +16,8 @@ public interface ArticleService {
     ArticleDTO queryByArticleId(Integer id);
 
     boolean modifyArticle(ArticleDTO articleDTO);
+
+    int removeArticle(List<Integer> idList);
+
+    String queryTop20Content(Integer id);
 }
